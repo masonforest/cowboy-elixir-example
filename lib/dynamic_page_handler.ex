@@ -34,24 +34,42 @@ defmodule DynamicPageHandler do
     #   * A list of 2-tuples representing headers
     #   * The body of the response
     #   * The original request
-    req = :cowboy_req.reply(
 
-      # status code
-      200,
+    # TODO: this errors at runtime
+    { :ok, reply } = :cowboy_req.reply(200, [{"content-type", "text/html"}], build_body(request), request)
 
-      # headers
-      [ {"content-type", "text/html"} ],
+"""
+=CRASH REPORT==== 31-Mar-2019::14:52:53.670092 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.242.0>
+    registered_name: []
+    exception error: {badmap,[{<<"content-type">>,<<"text/html">>}]}
+      in function  cowboy_req:reply/4 (/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_req.erl, line 785)
+      in call from 'Elixir.DynamicPageHandler':handle/2 (lib/dynamic_page_handler.ex, line 39)
+      in call from cowboy_handler:execute/2 (/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_handler.erl, line 41)
+      in call from cowboy_stream_h:execute/3 (/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_stream_h.erl, line 296)
+      in call from cowboy_stream_h:request_process/3 (/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_stream_h.erl, line 274)
+    ancestors: [<0.241.0>,<0.212.0>,<0.211.0>,ranch_sup,<0.200.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.241.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 1598
+    stack_size: 27
+    reductions: 700
+  neighbours:
 
-      # body of reply.
-      build_body(request),
+=ERROR REPORT==== 31-Mar-2019::14:52:53.671836 ===
+Ranch listener 100, connection process <0.241.0>, stream 1 had its request process <0.242.0> exit with reason {badmap,[{<<"content-type">>,<<"text/html">>}]} and stacktrace [{cowboy_req,reply,4,[{file,"/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_req.erl"},{line,785}]},{'Elixir.DynamicPageHandler',handle,2,[{file,"lib/dynamic_page_handler.ex"},{line,39}]},{cowboy_handler,execute,2,[{file,"/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_handler.erl"},{line,41}]},{cowboy_stream_h,execute,3,[{file,"/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_stream_h.erl"},{line,296}]},{cowboy_stream_h,request_process,3,[{file,"/Users/michael/src/cowboy-elixir-example/deps/cowboy/src/cowboy_stream_h.erl"},{line,274}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,249}]}]
 
-      # original request
-      request
-    )
+"""
 
     # handle/2 returns a tuple starting containing :ok, the reply, and the
     # current state of the handler.
-    {:ok, req, state}
+    {:ok, reply, state}
   end
 
 

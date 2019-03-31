@@ -3,7 +3,7 @@ defmodule CowboyElixirExample.Mixfile do
 
   def project do
     [app: :cowboy_elixir_example,
-     version: "0.0.3",
+     version: "0.1.0",
      elixir: ">= 1.0.0",
      deps: deps()]
   end
@@ -29,8 +29,8 @@ defmodule CowboyElixirExample.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      { :cowboy, "~> 2.4.0" },
-      { :poison, "~> 4.0.1" }
+      { :cowboy, "~> 2.6" },
+      {:jason, "~> 1.1"}
     ]
   end
 end

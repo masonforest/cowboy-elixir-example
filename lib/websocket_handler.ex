@@ -29,14 +29,14 @@ defmodule WebsocketHandler do
   # handle ping/pong, cowboy takes care of that.
   def websocket_handle({:text, content}, state) do
 
-    # Use Poison to decode the JSON message and extract the word entered
+    # Use Jason to decode the JSON message and extract the word entered
     # by the user into the variable 'message'.
-    { :ok, %{ "message" => message} } = Poison.decode!(content)
+    %{ "message" => message} = Jason.decode!(content)
 
-    # Reverse the message and use Poison to re-encode a reply contatining
+    # Reverse the message and use Jason to re-encode a reply contatining
     # the reversed message.
     rev = String.reverse(message)
-    { :ok, reply } = Poison.encode(%{ reply: rev})
+    { :ok, reply } = Jason.encode(%{ reply: rev})
 
     # All websocket callbacks share the same return values.
     # See http://ninenines.eu/docs/en/cowboy/2.0/manual/cowboy_websocket/
@@ -62,7 +62,7 @@ defmodule WebsocketHandler do
     time = time_as_string()
 
     # encode a json reply in the variable 'message'
-    { :ok, message } = Poison.encode(%{ time: time })
+    { :ok, message } = Jason.encode(%{ time: time })
 
     # set a new timer to send a :timeout message back to this
     # process a second from now. This will recursively call
